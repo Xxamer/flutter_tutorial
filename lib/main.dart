@@ -1,3 +1,4 @@
+import "package:emailsapp/models/chats.dart";
 import "package:flutter/material.dart";
 
 void main() => runApp(const App());
@@ -9,7 +10,7 @@ class App extends StatelessWidget {
     return const MaterialApp(
       title: 'Esto funciona',
       home: Home(
-        title: 'Ya se kung fu',
+        title: 'Emails app',
       ),
     );
   }
@@ -23,6 +24,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<ChatModel> emails = [
+    ChatModel(email: 'Tonto el que lo lea'),
+    ChatModel(email: 'email2@email.com'),
+  ];
+
+  void addMailo(String text) {
+    setState(() {
+      emails.add(ChatModel(email: text));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,21 +52,36 @@ class _HomeState extends State<Home> {
       //Row or column reciben un array de widgets
       // Las columnas y filas reciben todo el alto de la  pantalla por defecto
 
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            var t = DateTime.now();
-            print(t);
-          },
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const <Widget>[
-                Icon(Icons.access_time_filled),
-                Text("Now"),
-              ]),
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: emails.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(top: 10, left: 20),
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(emails[index].email),
+                    // Puedes agregar otros elementos a la ListTile según tus necesidades
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: () => addMailo("Baneado por bobi"),
+                backgroundColor: Colors.green,
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ),
+        ],
       ),
     );
 
